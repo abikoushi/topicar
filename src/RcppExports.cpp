@@ -7,12 +7,12 @@
 using namespace Rcpp;
 
 // topic_ar
-List topic_ar(arma::mat X, double sigma, int L, int n_p, int iter, double lr, std::string actfun);
+List topic_ar(arma::sp_mat X, double sigma, int L, int n_p, int iter, double lr, std::string actfun);
 RcppExport SEXP _topicar_topic_ar(SEXP XSEXP, SEXP sigmaSEXP, SEXP LSEXP, SEXP n_pSEXP, SEXP iterSEXP, SEXP lrSEXP, SEXP actfunSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::sp_mat >::type X(XSEXP);
     Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
     Rcpp::traits::input_parameter< int >::type L(LSEXP);
     Rcpp::traits::input_parameter< int >::type n_p(n_pSEXP);
