@@ -65,10 +65,10 @@ arma::uvec sample_arma(arma::vec & pvec) {
 }
 
 // [[Rcpp::export]]
-List topic_ar(arma::mat X, double sigma, int L, int n_p, int iter, double lr, std::string actfun){
+List topic_ar(arma::sp_mat X, double sigma, int L, int n_p, int iter, double lr, std::string actfun){
   int N = X.n_rows;
   int K = X.n_cols;
-  X.insert_rows(0,arma::zeros<arma::rowvec>(K));
+  // X.insert_rows(0,arma::zeros<arma::rowvec>(K));
   std::unique_ptr<activation> g;
   if(actfun=="softmax"){
     g.reset(new softmax);
@@ -85,8 +85,8 @@ List topic_ar(arma::mat X, double sigma, int L, int n_p, int iter, double lr, st
   }
   arma::mat W = arma::randn<arma::mat>(K,L);
   arma::mat B = arma::zeros<arma::mat>(K,K);
-  arma::cube Z(N+1,L,n_p);
-  arma::cube U(N+1,L,n_p);
+  arma::cube Z(N,L,n_p);
+  arma::cube U(N,L,n_p);
   arma::vec loglik = arma::zeros<arma::vec>(iter);
   Progress prog(iter);
   for(int i=0; i<iter; i++){
@@ -94,7 +94,7 @@ List topic_ar(arma::mat X, double sigma, int L, int n_p, int iter, double lr, st
     Z = Z*sigma;
     arma::mat d_W = arma::zeros<arma::mat>(K,L);
     arma::mat d_B = arma::zeros<arma::mat>(K,K);
-    for(int n=1; n<N+1; n++){
+    for(int n=1; n<N; n++){
       arma::mat Z_n = Z.row(n)+Z.row(n-1);
       arma::mat U_n = (g -> eval(Z_n));
       arma::mat pred = W*U_n;
